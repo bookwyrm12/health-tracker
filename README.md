@@ -73,8 +73,8 @@ Only do this if you've made changes to the tables/columns. This is not necessary
 ## Authors
 
 * **April** - *---* - [bookwyrm12](https://github.com/bookwyrm12)
-* **Duncan** - *---* - [---](https://github.com/---)
-* **Maninder** - *---* - [---](https://github.com/---)
+* **Duncan** - *---* - [DuncanClelland](https://github.com/DuncanClelland)
+* **Maninder** - *---* - [maninderkaur97](https://github.com/maninderkaur97)
 
 ## License
 
