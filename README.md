@@ -9,7 +9,7 @@ Short project description.
 Install the following:
 
 * Java JRE & JDK
-* MySQL
+* MySQL (version 5.7.25)
 * Netbeans IDE
 
 ### Database
