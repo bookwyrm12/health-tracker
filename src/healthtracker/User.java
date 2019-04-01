@@ -173,4 +173,10 @@ public class User {
     public void setActivityLevel(String activity_level) {
         this.activity_level = activity_level;
     }
+    
+    public boolean saveUser() {
+        boolean success = false;
+        // TODO
+        return success;
+    }
 }
