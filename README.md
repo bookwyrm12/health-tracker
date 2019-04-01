@@ -56,6 +56,12 @@ mysqldump -u root -p --no-data --databases healthtracker > db/schema.sql
 
 Only do this if you've made changes to the tables/columns. This is not necessary if you've changed data within your database.
 
+#### Setting Up Your Database Configuration
+
+1. Create a `config.properties` file (copy the `config.properties.template` file).
+
+2. Update the values for your MySQL username & password (and host if different from the default).
+
 ### Running The App
 
 ## About The App

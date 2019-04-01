@@ -1,0 +1,4 @@
+jdbcHost=localhost:3306
+jdbcName=healthtracker
+jdbcUsername=root
+jdbcPassword=password

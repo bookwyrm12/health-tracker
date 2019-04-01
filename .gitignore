@@ -1,3 +1,6 @@
+# Healthtracker files
+config.properties
+
 # IDE files
 .project
 .classpath
