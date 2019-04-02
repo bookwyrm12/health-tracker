@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Properties;
+import java.util.Scanner;
 
 /**
  *
@@ -13,10 +14,35 @@ public class HealthTracker {
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
-        // Get & load properties from config file
-        getConfig("config.properties");
         
-        // TODO code application logic here
+        //---------------------------------------
+        // Initialization
+        //---------------------------------------
+        
+        getConfig("config.properties");             /* Get & load properties from config file. */
+        Scanner scanner = new Scanner(System.in);   /* Init scanner. */
+        
+        
+        //---------------------------------------
+        // 0. Welcome Menu
+        //---------------------------------------
+        
+        
+        //---------------------------------------
+        // 1. User Information Menu
+        //---------------------------------------
+        
+        
+        //---------------------------------------
+        // 2. Diary (Food) Menu
+        //---------------------------------------
+        
+        
+        //---------------------------------------
+        // 3. Activity Menu
+        //---------------------------------------
+        
+        
     }
     
     /**
