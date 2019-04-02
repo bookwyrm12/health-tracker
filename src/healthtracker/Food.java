@@ -1,6 +1,6 @@
 /**
  *
- * @author 
+ * @author April Nickel
  */
 public class Food {
     
@@ -117,5 +117,4 @@ public class Food {
     public void setFats(float numFats) {
         this.numFats = numFats;
     }
-    
 }
