@@ -43,7 +43,7 @@ public class Diary {
      */
     public DiaryEntry getEntry() {
         // TODO
-        DiaryEntry entry = new DiaryEntry(new Food(), 0);
+        DiaryEntry entry = new DiaryEntry(new Food(""), 0);
         return entry;
     }
     
