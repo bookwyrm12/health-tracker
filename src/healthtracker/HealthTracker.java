@@ -23,7 +23,7 @@ public class HealthTracker {
         //---------------------------------------
         
 //        getConfig("config.properties");                         /* Get & load properties from config file. */
-        ScreenOption nextScreen = ScreenOption.WELCOME_MENU;    /* Next screen to display. */
+        ScreenOption nextScreen = ScreenOption.MAIN_MENU;       /* Next screen to display. */
         
         System.out.println("*********************************");
         System.out.println("************ WELCOME ************");
@@ -31,13 +31,13 @@ public class HealthTracker {
         
         while(nextScreen != ScreenOption.EXIT) {
             switch(nextScreen) {
-                case WELCOME_MENU:
+                case MAIN_MENU:
                     
                     //---------------------------------------
-                    // 0. Welcome Menu
+                    // 0. Main Menu
                     //---------------------------------------
                     
-                    nextScreen = welcomeMenu();                 break;
+                    nextScreen = mainMenu();                 break;
                     
                 case USER_NEW:
                     
@@ -131,18 +131,20 @@ public class HealthTracker {
     }
     
     /**
-     * Welcome Menu.
+     * Main Menu.
      */
-    private static ScreenOption welcomeMenu() {
+    private static ScreenOption mainMenu() {
         
         //---------------------------------------
-        // 0. Welcome Menu
+        // 0. Main Menu
         //---------------------------------------
         
 //        if (user == null) {
 //            return ScreenOption.USER_NEW;
 //        }
         
+        System.out.println();
+        System.out.println("--- MAIN MENU ---");
         System.out.println();
         System.out.println("Please make a selection:");
         System.out.println("(F) Food Diary");
@@ -181,7 +183,7 @@ public class HealthTracker {
         
         // TODO
         
-        return ScreenOption.WELCOME_MENU;
+        return ScreenOption.MAIN_MENU;
     }
     
     /**
@@ -195,7 +197,7 @@ public class HealthTracker {
         
         // TODO
         
-        return ScreenOption.WELCOME_MENU;
+        return ScreenOption.MAIN_MENU;
     }
     
     /**
@@ -209,7 +211,7 @@ public class HealthTracker {
         
         // TODO
         
-        return ScreenOption.WELCOME_MENU;
+        return ScreenOption.MAIN_MENU;
     }
     
     /**
@@ -223,7 +225,7 @@ public class HealthTracker {
         
         // TODO
         
-        return ScreenOption.WELCOME_MENU;
+        return ScreenOption.MAIN_MENU;
     }
     
     /**
@@ -237,7 +239,7 @@ public class HealthTracker {
         
         // TODO
         
-        return ScreenOption.WELCOME_MENU;
+        return ScreenOption.MAIN_MENU;
     }
     
     /**
@@ -251,7 +253,7 @@ public class HealthTracker {
         
         // TODO
         
-        return ScreenOption.WELCOME_MENU;
+        return ScreenOption.MAIN_MENU;
     }
     
     /**
@@ -265,7 +267,7 @@ public class HealthTracker {
         
         // TODO
         
-        return ScreenOption.WELCOME_MENU;
+        return ScreenOption.MAIN_MENU;
     }
     
     /**
@@ -279,7 +281,7 @@ public class HealthTracker {
         
         // TODO
         
-        return ScreenOption.WELCOME_MENU;
+        return ScreenOption.MAIN_MENU;
     }
     
     /**
@@ -307,7 +309,7 @@ public class HealthTracker {
                 case "y":
                     return ScreenOption.EXIT;
                 case "n":
-                    return ScreenOption.WELCOME_MENU;
+                    return ScreenOption.MAIN_MENU;
                 default:
                     System.out.println("Please enter a valid option.");
             }
