@@ -23,6 +23,8 @@ public class User {
     private float height_goal;                   /**  */
     private String activity_level;               /**  */
     
+    private Diary diary;                         /**  */
+    
     
     //---------------------------------------
     // Constructors
