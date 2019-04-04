@@ -180,4 +180,11 @@ public class User {
         // TODO
         return success;
     }
+    
+    /**
+     * Add an entry to the user's diary.
+     */
+    public void addDiaryEntry(Food food, float quantity) {
+        this.diary.addEntry(food, quantity);
+    }
 }

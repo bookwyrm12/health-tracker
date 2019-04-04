@@ -29,6 +29,17 @@ public class Food {
         this.name = name;
     }
     
+    /**
+     * Create a new Food.
+     */
+    public Food(String name, float numCalories, float numCarbs, float numProteins, float numFats) {
+        this.name = name;
+        this.numCalories = numCalories;
+        this.numCarbs = numCarbs;
+        this.numProteins = numProteins;
+        this.numFats = numFats;
+    }
+    
     
     //---------------------------------------
     // Class methods

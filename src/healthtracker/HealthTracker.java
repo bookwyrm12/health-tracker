@@ -139,6 +139,7 @@ public class HealthTracker {
         // 0. Main Menu
         //---------------------------------------
         
+        // TODO: temporarily disabled until userNew() is complete
 //        if (user == null) {
 //            return ScreenOption.USER_NEW;
 //        }
@@ -209,9 +210,33 @@ public class HealthTracker {
         // 3. Diary (Food) Menu
         //---------------------------------------
         
-        // TODO
+        System.out.println();
+        System.out.println("--- DIARY: MENU ---");
+        System.out.println();
+        System.out.println("Please make a selection:");
+        System.out.println("(N) Add New Diary Entry");
+        System.out.println("(H) View Diary Entries");
+        System.out.println("(B) Back to Main Menu");
+        System.out.println("(Q) Exit Application");
+        System.out.println();
         
-        return ScreenOption.MAIN_MENU;
+        String selection;
+        
+        while(true) {
+            selection = scanner.nextLine().toLowerCase();
+            switch(selection) {
+                case "n":
+                    return ScreenOption.DIARY_NEW_ENTRY;
+                case "h":
+                    return ScreenOption.DIARY_VIEW;
+                case "b":
+                    return ScreenOption.MAIN_MENU;
+                case "q":
+                    return ScreenOption.EXIT_CONFIRM;
+                default:
+                    System.out.println("Please enter a valid option.");
+            }
+        }
     }
     
     /**
@@ -237,9 +262,115 @@ public class HealthTracker {
         // 5. New Diary Entry Input
         //---------------------------------------
         
-        // TODO
+        boolean run = true;
+        boolean makeSelection = true;
+        String selection, food;
+        float calories, carbs, proteins, fats, quantity;
         
-        return ScreenOption.MAIN_MENU;
+        while(run) {
+            System.out.println();
+            System.out.println("--- DIARY: NEW ENTRY ---");
+            System.out.println();
+            
+            System.out.println("Food:");
+            food = scanner.nextLine();
+
+            System.out.println("Quantity consumed:");
+            while(true) {
+                if (scanner.hasNextFloat()) {
+                    quantity = scanner.nextFloat();
+                    break;
+                } else {
+                    System.out.println("Please enter a valid numerical value.");
+                }
+            }
+
+            System.out.println("Calories:");
+            while(true) {
+                if (scanner.hasNextFloat()) {
+                    calories = scanner.nextFloat();
+                    break;
+                } else {
+                    System.out.println("Please enter a valid numerical value (0 is acceptable)");
+                }
+            }
+
+            System.out.println("Carbs:");
+            while(true) {
+                if (scanner.hasNextFloat()) {
+                    carbs = scanner.nextFloat();
+                    break;
+                } else {
+                    System.out.println("Please enter a valid numerical value (0 is acceptable)");
+                }
+            }
+
+            System.out.println("Proteins:");
+            while(true) {
+                if (scanner.hasNextFloat()) {
+                    proteins = scanner.nextFloat();
+                    break;
+                } else {
+                    System.out.println("Please enter a valid numerical value (0 is acceptable)");
+                }
+            }
+
+            System.out.println("Fats:");
+            while(true) {
+                if (scanner.hasNextFloat()) {
+                    fats = scanner.nextFloat();
+                    break;
+                } else {
+                    System.out.println("Please enter a valid numerical value (0 is acceptable)");
+                }
+            }
+
+            System.out.println();
+            System.out.println("Would you like to save this diary entry?");
+            System.out.println();
+            System.out.println("Food: " + food);
+            System.out.printf("Quantity: %.0f%n", quantity);
+            System.out.printf("Calories: %.0f%n", calories);
+            System.out.printf("Carbs: %.1f%n", carbs);
+            System.out.printf("Proteins: %.1f%n", proteins);
+            System.out.printf("Fats: %.1f%n", fats);
+            System.out.println();
+            System.out.println("(Y) Yes, save entry");
+            System.out.println("(N) No, enter new information");
+            System.out.println("(B) No, Back to Main Menu");
+            System.out.println("(Q) No, Exit Application");
+            
+            scanner.next();
+            while(makeSelection) {
+                selection = scanner.nextLine().toLowerCase();
+                System.out.println(selection);
+                switch(selection) {
+                    case "y":
+                        Food newFood = new Food(food, calories, carbs, proteins, fats);
+                        user.addDiaryEntry(newFood, quantity);
+                        System.out.println();
+                        System.out.println("Entry saved.");
+                        System.out.println();
+                        makeSelection = false;
+                        run = false;
+                        break;
+                    case "n":
+                        System.out.println();
+                        System.out.println("Entry discarded.");
+                        System.out.println();
+                        makeSelection = false;
+                        break;
+                    case "b":
+                        return ScreenOption.MAIN_MENU;
+                    case "q":
+                        return ScreenOption.EXIT_CONFIRM;
+                    default:
+                        System.out.println("Please enter a valid option.");
+                }
+            }
+        }
+        
+        return ScreenOption.DIARY_MENU;
     }
     
     /**
@@ -251,7 +382,40 @@ public class HealthTracker {
         // 6. Activity Menu
         //---------------------------------------
         
-        // TODO
+        // TODO: temporarily disabled; Activity module not included in MVP
+//        System.out.println();
+//        System.out.println("--- ACTIVITIES: MENU ---");
+//        System.out.println();
+//        System.out.println("Please make a selection:");
+//        System.out.println("(N) Add New Activity");
+//        System.out.println("(H) View Activity History");
+//        System.out.println("(B) Back to Main Menu");
+//        System.out.println("(Q) Exit Application");
+//        System.out.println();
+//        
+//        String selection;
+//        
+//        while(true) {
+//            selection = scanner.nextLine().toLowerCase();
+//            switch(selection) {
+//                case "n":
+//                    return ScreenOption.ACTIVITY_NEW;
+//                case "h":
+//                    return ScreenOption.ACTIVITY_LOG_VIEW;
+//                case "b":
+//                    return ScreenOption.MAIN_MENU;
+//                case "q":
+//                    return ScreenOption.EXIT_CONFIRM;
+//                default:
+//                    System.out.println("Please enter a valid option.");
+//            }
+//        }
+
+        System.out.println();
+        System.out.println("--- ACTIVITIES ---");
+        System.out.println();
+        System.out.println("This module is under development. Please try again later!");
+        System.out.println();
         
         return ScreenOption.MAIN_MENU;
     }
@@ -265,7 +429,7 @@ public class HealthTracker {
         // 7. Activity Log Report
         //---------------------------------------
         
-        // TODO
+        // TODO: Activity module not included in MVP
         
         return ScreenOption.MAIN_MENU;
     }
@@ -279,7 +443,7 @@ public class HealthTracker {
         // 8. New Activity Input
         //---------------------------------------
         
-        // TODO
+        // TODO: Activity module not included in MVP
         
         return ScreenOption.MAIN_MENU;
     }
@@ -293,6 +457,8 @@ public class HealthTracker {
         // 9. Exit Confirmation
         //---------------------------------------
         
+        System.out.println();
+        System.out.println("--- EXIT CONFIRMATION ---");
         System.out.println();
         System.out.println("Are you sure you want to quit?");
         System.out.println();
