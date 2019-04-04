@@ -192,14 +192,18 @@ CREATE TABLE `person` (
   `email` varchar(255) NOT NULL,
   `gender` varchar(255) NOT NULL,
   `birth_date` date NOT NULL,
-  `current_weight_id` float NOT NULL,
-  `current_height_id` float NOT NULL,
+  `current_weight_id` bigint(20) NOT NULL,
+  `current_height_id` bigint(20) NOT NULL,
   `goal_weight` float NOT NULL,
   `goal_calories` float NOT NULL,
   `activity_level` varchar(255) NOT NULL,
   PRIMARY KEY (`person_id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
-  KEY `person_name_idx` (`name`)
+  KEY `person_name_idx` (`name`),
+  KEY `current_weight_id_person_idx` (`current_weight_id`),
+  KEY `current_height_id_person_idx` (`current_height_id`),
+  CONSTRAINT `current_height_id_person` FOREIGN KEY (`current_height_id`) REFERENCES `height_log` (`height_log_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `current_weight_id_person` FOREIGN KEY (`current_weight_id`) REFERENCES `weight_log` (`weight_log_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='								';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -253,4 +257,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-01 22:29:44
+-- Dump completed on 2019-04-03 17:47:39
