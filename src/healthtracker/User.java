@@ -19,7 +19,7 @@ public class User {
     private float weight;                        /**  */
     private float weight_goal;                   /**  */
     private float height;                        /**  */
-    private float height_goal;                   /**  */
+    private float calories_goal;                 /**  */
     private String activity_level;               /**  */
     
     private Diary diary;                         /**  */
@@ -41,6 +41,20 @@ public class User {
     //---------------------------------------
     // Class methods
     //---------------------------------------
+    
+    /**
+     * Get id.
+     */
+    public int getId() {
+        return this.id;
+    }
+    
+    /**
+     * Set id.
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
     
     /**
      * Get name.
@@ -148,17 +162,17 @@ public class User {
     }
     
     /**
-     * Get height goal.
+     * Get calories goal.
      */
-    public float getHeightGoal() {
-        return this.height_goal;
+    public float getCaloriesGoal() {
+        return this.calories_goal;
     }
     
     /**
-     * Set height goal.
+     * Set calories goal.
      */
-    public void setHeightGoal(float goal) {
-        this.height_goal = goal;
+    public void setCaloriesGoal(float goal) {
+        this.calories_goal = goal;
     }
     
     /**
