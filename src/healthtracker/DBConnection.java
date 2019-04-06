@@ -38,8 +38,6 @@ public class DBConnection {
     public DBConnection() {
         getConnectionConfig("health-tracker/config.properties");
         initConnection();
-        initDB("health-tracker/db/schema.sql");
-        seedDB("health-tracker/db/seed.sql");
     }
     
     
@@ -117,5 +115,9 @@ public class DBConnection {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
         }
+    }
+    
+    public void seedObjectsFromDB() {
+        // TODO
     }
 }

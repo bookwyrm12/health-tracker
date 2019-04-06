@@ -22,7 +22,11 @@ public class HealthTracker {
         // Initialization
         //---------------------------------------
         
-        DBConnection db = new DBConnection();                   /* Initialize & seed DB. */
+        DBConnection db = new DBConnection();                   /* Initialize DB connection. */
+        db.initDB("health-tracker/db/schema.sql");              /* Initialize DB tables. */
+        db.seedDB("health-tracker/db/seed.sql");                /* Seed DB test data. */
+        db.seedObjectsFromDB();                                 /* Populate java objects from test DB data. */
+        
         ScreenOption nextScreen = ScreenOption.MAIN_MENU;       /* Next screen to display. */
         
         System.out.println("*********************************");
