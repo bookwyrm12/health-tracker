@@ -1,15 +1,15 @@
-CREATE DATABASE  IF NOT EXISTS `health_tracker` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
-USE `health_tracker`;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `healthtracker` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `healthtracker`;
 -- MySQL dump 10.13  Distrib 8.0.15, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: health_tracker
+-- Host: 127.0.0.1    Database: healthtracker
 -- ------------------------------------------------------
 -- Server version	8.0.15
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
- SET NAMES utf8 ;
+ /*!40101 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -23,13 +23,13 @@ USE `health_tracker`;
 
 DROP TABLE IF EXISTS `activity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activity` (
   `activity_id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` longtext NOT NULL,
   PRIMARY KEY (`activity_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +47,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `activity_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activity_log` (
   `activity_log_id` bigint(20) NOT NULL,
   `activity_id` bigint(20) NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE `activity_log` (
   KEY `person_id_activity_log_idx` (`person_id`),
   CONSTRAINT `activity_id_activity_log` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `person_id_activity_log` FOREIGN KEY (`person_id`) REFERENCES `person` (`person_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,11 +78,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bmi_table`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bmi_table` (
   `bmi_range_id` bigint(20) NOT NULL,
   PRIMARY KEY (`bmi_range_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +100,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `food`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `food` (
   `food_id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE `food` (
   `proteins` float NOT NULL,
   `fats` float NOT NULL,
   PRIMARY KEY (`food_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='		';
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,7 +127,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `food_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `food_log` (
   `food_log_id` bigint(20) NOT NULL,
   `food_id` bigint(20) NOT NULL,
@@ -139,7 +139,7 @@ CREATE TABLE `food_log` (
   KEY `person_id_food_log_idx` (`person_id`),
   CONSTRAINT `food_id_food_log` FOREIGN KEY (`food_id`) REFERENCES `food` (`food_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `person_id_food_log` FOREIGN KEY (`person_id`) REFERENCES `person` (`person_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='	';
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,7 +157,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `height_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `height_log` (
   `height_log_id` bigint(20) NOT NULL,
   `person_id` bigint(20) NOT NULL,
@@ -167,7 +167,7 @@ CREATE TABLE `height_log` (
   PRIMARY KEY (`height_log_id`),
   KEY `person_id_idx` (`person_id`),
   CONSTRAINT `person_id_height_log` FOREIGN KEY (`person_id`) REFERENCES `person` (`person_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -185,7 +185,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `person`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `person` (
   `person_id` bigint(20) NOT NULL DEFAULT '10101',
   `name` varchar(255) NOT NULL,
@@ -204,7 +204,7 @@ CREATE TABLE `person` (
   KEY `current_height_id_person_idx` (`current_height_id`),
   CONSTRAINT `current_height_id_person` FOREIGN KEY (`current_height_id`) REFERENCES `height_log` (`height_log_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `current_weight_id_person` FOREIGN KEY (`current_weight_id`) REFERENCES `weight_log` (`weight_log_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='								';
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -222,7 +222,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `weight_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `weight_log` (
   `weight_log_id` bigint(20) NOT NULL,
   `person_id` bigint(20) NOT NULL,
@@ -232,7 +232,7 @@ CREATE TABLE `weight_log` (
   PRIMARY KEY (`weight_log_id`),
   KEY `person_id_idx` (`person_id`),
   CONSTRAINT `person_id` FOREIGN KEY (`person_id`) REFERENCES `person` (`person_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -245,7 +245,7 @@ LOCK TABLES `weight_log` WRITE;
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'health_tracker'
+-- Dumping routines for database 'healthtracker'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
