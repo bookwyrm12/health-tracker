@@ -27,7 +27,7 @@ DROP TABLE IF EXISTS `activity`;
 CREATE TABLE `activity` (
   `activity_id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `description` longtext NOT NULL,
+  `description` longtext,
   PRIMARY KEY (`activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -52,8 +52,8 @@ CREATE TABLE `activity_log` (
   `activity_log_id` bigint(20) NOT NULL,
   `activity_id` bigint(20) NOT NULL,
   `person_id` bigint(20) NOT NULL,
-  `duration` float NOT NULL,
-  `calories_burned` float NOT NULL,
+  `duration` float,
+  `calories_burned` float,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`activity_log_id`),
   KEY `activity_id_activity_log_idx` (`activity_id`),
@@ -104,10 +104,10 @@ DROP TABLE IF EXISTS `food`;
 CREATE TABLE `food` (
   `food_id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `type` varchar(255) NOT NULL,
-  `calories` float NOT NULL,
-  `proteins` float NOT NULL,
-  `fats` float NOT NULL,
+  `type` varchar(255),
+  `calories` float,
+  `proteins` float,
+  `fats` float,
   PRIMARY KEY (`food_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -189,14 +189,14 @@ DROP TABLE IF EXISTS `person`;
 CREATE TABLE `person` (
   `person_id` bigint(20) NOT NULL DEFAULT '10101',
   `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `gender` varchar(255) NOT NULL,
-  `birth_date` date NOT NULL,
-  `current_weight_id` bigint(20) NOT NULL,
-  `current_height_id` bigint(20) NOT NULL,
-  `goal_weight` float NOT NULL,
-  `goal_calories` float NOT NULL,
-  `activity_level` varchar(255) NOT NULL,
+  `email` varchar(255),
+  `gender` varchar(255),
+  `birth_date` date,
+  `current_weight_id` bigint(20),
+  `current_height_id` bigint(20),
+  `goal_weight` float,
+  `goal_calories` float,
+  `activity_level` varchar(255),
   PRIMARY KEY (`person_id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
   KEY `person_name_idx` (`name`),
