@@ -22,7 +22,7 @@ public class HealthTracker {
         // Initialization
         //---------------------------------------
         
-//        getConfig("config.properties");                         /* Get & load properties from config file. */
+        DBConnection db = new DBConnection();                   /* Initialize & seed DB. */
         ScreenOption nextScreen = ScreenOption.MAIN_MENU;       /* Next screen to display. */
         
         System.out.println("*********************************");
@@ -118,16 +118,7 @@ public class HealthTracker {
         
         System.out.println();
         System.out.println("Good-bye!");
-    }
-    
-    /**
-     * Get & load properties from config file
-     */
-    private static void getConfig(String fileName) throws Exception {
-        FileInputStream propFile = new FileInputStream(fileName);
-        Properties p = new Properties(System.getProperties());
-        p.load(propFile);
-        System.setProperties(p);
+        System.exit(0);
     }
     
     /**

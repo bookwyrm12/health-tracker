@@ -1,4 +1,5 @@
-jdbcHost=localhost:3306
-jdbcName=healthtracker
-jdbcUsername=root
-jdbcPassword=password
+# mysql properties
+mysql.driver=com.mysql.jdbc.Driver
+mysql.url=jdbc:mysql://localhost:3306/healthtracker?useSSL=false&serverTimezone=UTC
+mysql.username=user
+mysql.password=password
