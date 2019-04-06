@@ -134,7 +134,7 @@ CREATE TABLE `food_log` (
   `food_id` bigint(20) NOT NULL,
   `person_id` bigint(20) NOT NULL,
   `quantity` float NOT NULL DEFAULT '1',
-  `update_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
   PRIMARY KEY (`food_log_id`),
   KEY `food_id_food_log_idx` (`food_id`),
   KEY `person_id_food_log_idx` (`person_id`),
@@ -164,7 +164,7 @@ CREATE TABLE `height_log` (
   `person_id` bigint(20) NOT NULL,
   `unit` mediumtext NOT NULL,
   `amount` float NOT NULL,
-  `update_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
   PRIMARY KEY (`height_log_id`),
   KEY `person_id_idx` (`person_id`),
   CONSTRAINT `person_id_height_log` FOREIGN KEY (`person_id`) REFERENCES `person` (`person_id`) ON DELETE CASCADE ON UPDATE CASCADE
