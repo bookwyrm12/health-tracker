@@ -1,10 +1,14 @@
 import com.mysql.cj.jdbc.MysqlDataSource;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 /**
  *
@@ -34,8 +38,8 @@ public class DBConnection {
     public DBConnection() {
         getConnectionConfig("health-tracker/config.properties");
         initConnection();
-        initDB();
-        seedDB();
+        initDB("health-tracker/db/schema.sql");
+        seedDB("health-tracker/db/seed.sql");
     }
     
     
@@ -76,17 +80,42 @@ public class DBConnection {
             
         } catch (SQLException ex) {
             System.out.println("Failed to create the database connection.");
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
         }
         
         this.conn = conn;
     }
     
-    public void initDB() {
-        // TODO
+    public void initDB(String fileName) {
+        executeSqlFile(fileName);
     }
     
-    public void seedDB() {
-        // TODO
+    public void seedDB(String fileName) {
+        executeSqlFile(fileName);
+    }
+    
+    public void executeSqlFile(String fileName) {
+        // Reading a file to a string logic from:
+        // https://howtodoinjava.com/java/io/java-read-file-to-string-examples/
+        StringBuilder contentBuilder = new StringBuilder();
+        try (Stream<String> stream = Files.lines(Paths.get(fileName), StandardCharsets.UTF_8)) {
+            stream.forEach(s -> contentBuilder.append(s));
+            
+        } catch (IOException ex) {
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+        }
+        String query = contentBuilder.toString();
+        
+        try {
+            Connection conn = this.ds.getConnection();
+            PreparedStatement pst = conn.prepareStatement(query);
+            boolean isResult = pst.execute();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+        }
     }
 }
