@@ -106,6 +106,7 @@ CREATE TABLE `food` (
   `name` varchar(255) NOT NULL,
   `type` varchar(255),
   `calories` float,
+  `carbs` float,
   `proteins` float,
   `fats` float,
   PRIMARY KEY (`food_id`)
