@@ -1,16 +1,14 @@
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Properties;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  *
- * @author 
+ * @author April Nickel
  */
 public class HealthTracker {
     
-    static Scanner scanner = new Scanner(System.in);                   /* Init scanner. */
-    static User user;                                                  /* User of the program. */
+    static Scanner scanner = new Scanner(System.in);            /* Init scanner. */
+    static User user = null;                                    /* User of the program. */
 
     /**
      * @param args the command line arguments
@@ -25,13 +23,13 @@ public class HealthTracker {
         DBConnection db = new DBConnection();                   /* Initialize DB connection. */
         db.initDB("health-tracker/db/schema.sql");              /* Initialize DB tables. */
         db.seedDB("health-tracker/db/seed.sql");                /* Seed DB test data. */
-        db.seedObjectsFromDB();                                 /* Populate java objects from test DB data. */
         
         ScreenOption nextScreen = ScreenOption.MAIN_MENU;       /* Next screen to display. */
         
-        System.out.println("*********************************");
-        System.out.println("************ WELCOME ************");
-        System.out.println("*********************************");
+        String welcome = "*********************************%n" +
+                         "************ WELCOME ************%n" +
+                         "*********************************%n";
+        printFormat(welcome);
         
         while(nextScreen != ScreenOption.EXIT) {
             switch(nextScreen) {
@@ -41,7 +39,15 @@ public class HealthTracker {
                     // 0. Main Menu
                     //---------------------------------------
                     
-                    nextScreen = mainMenu();                 break;
+                    nextScreen = mainMenu();                    break;
+                    
+                case USER_SELECT:
+                    
+                    //---------------------------------------
+                    // x. Select User
+                    //---------------------------------------
+                    
+                    nextScreen = userSelect();                  break;
                     
                 case USER_NEW:
                     
@@ -120,9 +126,36 @@ public class HealthTracker {
             }
         }
         
-        System.out.println();
-        System.out.println("Good-bye!");
+        printFormat("%nGood-bye!%n");
         System.exit(0);
+    }
+    
+    /**
+     * Select an existing user (input screen).
+     */
+    private static ScreenOption userSelect() {
+        
+        //---------------------------------------
+        // x. Select User
+        //---------------------------------------
+        
+        int selectUser = 0;
+        ArrayList<User> users = User.getAll();
+        
+        if (users.isEmpty()) {
+            return ScreenOption.USER_NEW;
+        } else if (users.size() == 1) {
+            selectUser = users.get(0).getId();
+        } else {
+            // TODO
+            //      show list of users (with id as int)
+            //      input int to select user
+            //      check that int matches the id of a user in users
+        }
+        
+        user = User.find(selectUser);
+        
+        return ScreenOption.MAIN_MENU;
     }
     
     /**
@@ -134,25 +167,22 @@ public class HealthTracker {
         // 0. Main Menu
         //---------------------------------------
         
-        // TODO: temporarily disabled until userNew() is complete
-//        if (user == null) {
-//            return ScreenOption.USER_NEW;
-//        }
+        if (user == null) {
+            return ScreenOption.USER_SELECT;
+        }
         
-        System.out.println();
-        System.out.println("--- MAIN MENU ---");
-        System.out.println();
-        System.out.println("Please make a selection:");
-        System.out.println("(F) Food Diary");
-        System.out.println("(A) Activity Log");
-        System.out.println("(I) My Information");
-        System.out.println("(Q) Exit Application");
-        System.out.println();
+        String menu = "%n--- MAIN MENU ---%n" +
+                      "%nPlease make a selection:%n" +
+                      "(F) Food Diary%n" +
+                      "(A) Activity Log%n" +
+                      "(I) My Information%n" +
+                      "(Q) Exit Application%n";
+        printFormat(menu);
         
         String selection;
         
         while(true) {
-            selection = scanner.nextLine().toLowerCase();
+            selection = getInputString(null).toLowerCase();
             switch(selection) {
                 case "f":
                     return ScreenOption.DIARY_MENU;
@@ -163,7 +193,7 @@ public class HealthTracker {
                 case "q":
                     return ScreenOption.EXIT_CONFIRM;
                 default:
-                    System.out.println("Please enter a valid option.");
+                    printFormat("Please enter a valid option.%n");
             }
         }
     }
@@ -177,7 +207,77 @@ public class HealthTracker {
         // 1. New User Input
         //---------------------------------------
         
-        // TODO
+        boolean run = true;
+        boolean makeSelection = true;
+        String selection, name, email, gender, activity_level, birth_date;
+        int year, month, date;
+        float weight, weight_goal, height, calories_goal;
+        
+        while(run) {
+            String msg = "%n--- USER: NEW USER ---%n";
+            printFormat(msg);
+            
+            msg = "%n-Personal info-%n%n";
+            printFormat(msg);
+            
+            name        = getInputString("Name:");
+            email       = getInputString("Email:");
+            gender      = getInputString("Gender:");
+            year        = getInputInt("Birth year (1919-2019):",   "Please enter a valid integer between 1919-2019.", 1919, 2019);
+            month       = getInputInt("Birth month (1-12):",       "Please enter a valid integer between 1-12.", 1, 12);
+            date        = getInputInt("Birth date (1-31):",        "Please enter a valid integer between 1-31.", 1, 31);
+            birth_date  = String.format("%d-%02d-%02d", year, month, date);
+            
+            msg = "%n-Health info-%n%n";
+            printFormat(msg);
+            
+            height          = getInputFloat("Height:",             "Please enter a valid numerical value (0 is acceptable)");
+            weight          = getInputFloat("Weight:",             "Please enter a valid numerical value (0 is acceptable)");
+            weight_goal     = getInputFloat("Weight Goal:",        "Please enter a valid numerical value (0 is acceptable)");
+            calories_goal   = getInputFloat("Daily Calorie Goal:", "Please enter a valid numerical value (0 is acceptable)");
+            
+            msg = "%n---%n" +
+                  "%nWould you like to save your information?%n" +
+                  "Name: %s%n" +
+                  "Email: %s%n" +
+                  "Gender: %s%n" +
+                  "Birth Date: %s%n" +
+                  "Height: %.2f%n" +
+                  "Weight: %.2f%n" +
+                  "Weight Goal: %.2f%n" +
+                  "Daily Calorie goal: %.0f%n" +
+                  "%n(Y) Yes, save entry%n" +
+                  "(N) No, enter new information%n" +
+                  "(B) No, Back to Main Menu%n" +
+                  "(Q) No, Exit Application%n";
+            printFormat(msg, name, email, gender, birth_date, height, weight, weight_goal, calories_goal);
+            
+            while(makeSelection) {
+                selection = getInputString(null).toLowerCase();
+                switch(selection) {
+                    case "y":
+                        User u = new User(name, email, gender, weight, weight_goal, height, calories_goal, null);
+                        u.setBirthDate(birth_date);
+                        u.saveUser(true);
+                        printFormat("%nUser info saved.%n");
+                        makeSelection = false;
+                        run = false;
+                        break;
+                    case "n":
+                        printFormat("%nUser info discarded.%n");
+                        makeSelection = false;
+                        break;
+                    case "b":
+                        printFormat("%nUser info discarded.%n");
+                        return ScreenOption.MAIN_MENU;
+                    case "q":
+                        printFormat("%nUser info discarded.%n");
+                        return ScreenOption.EXIT_CONFIRM;
+                    default:
+                        printFormat("Please enter a valid option.%n");
+                }
+            }
+        }
         
         return ScreenOption.MAIN_MENU;
     }
@@ -205,20 +305,18 @@ public class HealthTracker {
         // 3. Diary (Food) Menu
         //---------------------------------------
         
-        System.out.println();
-        System.out.println("--- DIARY: MENU ---");
-        System.out.println();
-        System.out.println("Please make a selection:");
-        System.out.println("(N) Add New Diary Entry");
-        System.out.println("(H) View Diary Entries");
-        System.out.println("(B) Back to Main Menu");
-        System.out.println("(Q) Exit Application");
-        System.out.println();
+        String menu = "%n--- DIARY: MENU ---%n" +
+                      "%nPlease make a selection:%n" +
+                      "(N) Add New Diary Entry%n" +
+                      "(H) View Diary Entries%n" +
+                      "(B) Back to Main Menu%n" +
+                      "(Q) Exit Application%n";
+        printFormat(menu);
         
         String selection;
         
         while(true) {
-            selection = scanner.nextLine().toLowerCase();
+            selection = getInputString(null).toLowerCase();
             switch(selection) {
                 case "n":
                     return ScreenOption.DIARY_NEW_ENTRY;
@@ -229,7 +327,7 @@ public class HealthTracker {
                 case "q":
                     return ScreenOption.EXIT_CONFIRM;
                 default:
-                    System.out.println("Please enter a valid option.");
+                    printFormat("Please enter a valid option.%n");
             }
         }
     }
@@ -263,96 +361,43 @@ public class HealthTracker {
         float calories, carbs, proteins, fats, quantity;
         
         while(run) {
-            System.out.println();
-            System.out.println("--- DIARY: NEW ENTRY ---");
-            System.out.println();
+            String msg = "%n--- DIARY: NEW ENTRY ---%n";
+            printFormat(msg);
             
-            System.out.println("Food:");
-            food = scanner.nextLine();
-
-            System.out.println("Quantity consumed:");
-            while(true) {
-                if (scanner.hasNextFloat()) {
-                    quantity = scanner.nextFloat();
-                    break;
-                } else {
-                    System.out.println("Please enter a valid numerical value.");
-                }
-            }
-
-            System.out.println("Calories:");
-            while(true) {
-                if (scanner.hasNextFloat()) {
-                    calories = scanner.nextFloat();
-                    break;
-                } else {
-                    System.out.println("Please enter a valid numerical value (0 is acceptable)");
-                }
-            }
-
-            System.out.println("Carbs:");
-            while(true) {
-                if (scanner.hasNextFloat()) {
-                    carbs = scanner.nextFloat();
-                    break;
-                } else {
-                    System.out.println("Please enter a valid numerical value (0 is acceptable)");
-                }
-            }
-
-            System.out.println("Proteins:");
-            while(true) {
-                if (scanner.hasNextFloat()) {
-                    proteins = scanner.nextFloat();
-                    break;
-                } else {
-                    System.out.println("Please enter a valid numerical value (0 is acceptable)");
-                }
-            }
-
-            System.out.println("Fats:");
-            while(true) {
-                if (scanner.hasNextFloat()) {
-                    fats = scanner.nextFloat();
-                    break;
-                } else {
-                    System.out.println("Please enter a valid numerical value (0 is acceptable)");
-                }
-            }
-
-            System.out.println();
-            System.out.println("Would you like to save this diary entry?");
-            System.out.println();
-            System.out.println("Food: " + food);
-            System.out.printf("Quantity: %.0f%n", quantity);
-            System.out.printf("Calories: %.0f%n", calories);
-            System.out.printf("Carbs: %.1f%n", carbs);
-            System.out.printf("Proteins: %.1f%n", proteins);
-            System.out.printf("Fats: %.1f%n", fats);
-            System.out.println();
-            System.out.println("(Y) Yes, save entry");
-            System.out.println("(N) No, enter new information");
-            System.out.println("(B) No, Back to Main Menu");
-            System.out.println("(Q) No, Exit Application");
+            food        = getInputString("Food:");
             
-            scanner.next();
+            quantity    = getInputFloat("Quantity consumed:",   "Please enter a valid numerical value.");
+            calories    = getInputFloat("Calories:",            "Please enter a valid numerical value (0 is acceptable)");
+            carbs       = getInputFloat("Carbs:",               "Please enter a valid numerical value (0 is acceptable)");
+            proteins    = getInputFloat("Proteins:",            "Please enter a valid numerical value (0 is acceptable)");
+            fats        = getInputFloat("Fats:",                "Please enter a valid numerical value (0 is acceptable)");
+            
+            msg = "%n---%n" +
+                  "%nWould you like to save this diary entry?%n" +
+                  "%nFood: %s%n" +
+                  "Quantity: %.0f%n" +
+                  "Calories: %.0f%n" +
+                  "Carbs: %.1f%n" +
+                  "Proteins: %.1f%n" +
+                  "Fats: %.1f%n" +
+                  "%n(Y) Yes, save entry%n" +
+                  "(N) No, enter new information%n" +
+                  "(B) No, Back to Main Menu%n" +
+                  "(Q) No, Exit Application%n";
+            printFormat(msg, food, quantity, calories, carbs, proteins, fats);
+            
             while(makeSelection) {
-                selection = scanner.nextLine().toLowerCase();
-                System.out.println(selection);
+                selection = getInputString(null).toLowerCase();
                 switch(selection) {
                     case "y":
                         Food newFood = new Food(food, calories, carbs, proteins, fats);
                         user.addDiaryEntry(newFood, quantity);
-                        System.out.println();
-                        System.out.println("Entry saved.");
-                        System.out.println();
+                        printFormat("%nEntry saved.%n");
                         makeSelection = false;
                         run = false;
                         break;
                     case "n":
-                        System.out.println();
-                        System.out.println("Entry discarded.");
-                        System.out.println();
+                        printFormat("%nEntry discarded.%n");
                         makeSelection = false;
                         break;
                     case "b":
@@ -360,7 +405,7 @@ public class HealthTracker {
                     case "q":
                         return ScreenOption.EXIT_CONFIRM;
                     default:
-                        System.out.println("Please enter a valid option.");
+                        printFormat("Please enter a valid option.%n");
                 }
             }
         }
@@ -378,20 +423,18 @@ public class HealthTracker {
         //---------------------------------------
         
         // TODO: temporarily disabled; Activity module not included in MVP
-//        System.out.println();
-//        System.out.println("--- ACTIVITIES: MENU ---");
-//        System.out.println();
-//        System.out.println("Please make a selection:");
-//        System.out.println("(N) Add New Activity");
-//        System.out.println("(H) View Activity History");
-//        System.out.println("(B) Back to Main Menu");
-//        System.out.println("(Q) Exit Application");
-//        System.out.println();
+//        String menu = "%n--- ACTIVITIES: MENU ---%n" +
+//                      "%nPlease make a selection:%n" +
+//                      "(N) Add New Activity%n" +
+//                      "(H) View Activity History%n" +
+//                      "(B) Back to Main Menu%n" +
+//                      "(Q) Exit Application%n";
+//        printFormat(menu);
 //        
 //        String selection;
 //        
 //        while(true) {
-//            selection = scanner.nextLine().toLowerCase();
+//            selection = getInputString(null).toLowerCase();
 //            switch(selection) {
 //                case "n":
 //                    return ScreenOption.ACTIVITY_NEW;
@@ -402,15 +445,13 @@ public class HealthTracker {
 //                case "q":
 //                    return ScreenOption.EXIT_CONFIRM;
 //                default:
-//                    System.out.println("Please enter a valid option.");
+//                    printFormat("Please enter a valid option.%n");
 //            }
 //        }
-
-        System.out.println();
-        System.out.println("--- ACTIVITIES ---");
-        System.out.println();
-        System.out.println("This module is under development. Please try again later!");
-        System.out.println();
+        
+        String msg = "%n--- ACTIVITIES ---%n" +
+                     "%nThis module is under development. Please try again later!%n";
+        printFormat(msg);
         
         return ScreenOption.MAIN_MENU;
     }
@@ -452,28 +493,109 @@ public class HealthTracker {
         // 9. Exit Confirmation
         //---------------------------------------
         
-        System.out.println();
-        System.out.println("--- EXIT CONFIRMATION ---");
-        System.out.println();
-        System.out.println("Are you sure you want to quit?");
-        System.out.println();
-        System.out.println("Please make a selection:");
-        System.out.println("(Y) Yes, exit application");
-        System.out.println("(N) No, go back");
-        System.out.println();
+        String menu = "%n--- EXIT CONFIRMATION ---%n" +
+                      "%nAre you sure you want to quit?%n" +
+                      "%nPlease make a selection:%n" +
+                      "(Y) Yes, exit application%n" +
+                      "(N) No, go back%n";
+        printFormat(menu);
         
         String selection;
         
         while(true) {
-            selection = scanner.nextLine().toLowerCase();
+            selection = getInputString(null).toLowerCase();
             switch(selection) {
                 case "y":
                     return ScreenOption.EXIT;
                 case "n":
                     return ScreenOption.MAIN_MENU;
                 default:
-                    System.out.println("Please enter a valid option.");
+                    printFormat("Please enter a valid option.%n");
             }
         }
+    }
+    
+    //---------------------------------------
+    // Helper Methods
+    //---------------------------------------
+    
+    /**
+     * Print a string with formatting options.
+     * @param msg
+     * @param args
+     */
+    private static void printFormat(String msg, Object ... args) {
+        System.out.printf(msg, args);
+    }
+    
+    /**
+     * Get user input.
+     * @param prompt optional prompt to print
+     * @return String
+     */
+    private static String getInputString(String prompt) {
+        if (prompt != null) {
+            printFormat(prompt + "%n");
+        }
+        String input = scanner.nextLine();
+        return input;
+    }
+    
+    /**
+     * Get user input.
+     * @param prompt optional prompt to print
+     * @param errMsg error prompt to print
+     * @return float
+     */
+    private static float getInputFloat(String prompt, String errMsg) {
+        float input = 0;
+        if (prompt != null) {
+            printFormat(prompt + "%n");
+        }
+        while(true) {
+            if (scanner.hasNextFloat()) {
+                input = scanner.nextFloat();
+                scanner.nextLine();
+                break;
+            } else {
+                System.out.println(errMsg);
+            }
+        }
+        return input;
+    }
+    
+    /**
+     * Get user input.
+     * @param prompt optional prompt to print
+     * @param errMsg error prompt to print
+     * @param min optional min value allowed
+     * @param max optional max value allowed
+     * @return int
+     */
+    private static int getInputInt(String prompt, String errMsg, Integer min, Integer max) {
+        int input = 0;
+        boolean printErr = false;
+        if (prompt != null) {
+            printFormat(prompt + "%n");
+        }
+        while(true) {
+            if (printErr) printFormat(errMsg + "%n");
+            
+            if (scanner.hasNextInt()) {
+                input = scanner.nextInt();
+                scanner.nextLine();
+                if (min != null && max != null) {
+                    if (input >= min && input <= max) break;
+                } else if (min != null) {
+                    if (input >= min) break;
+                } else if (max != null) {
+                    if (input <= max) break;
+                } else {
+                    break;
+                }
+            }
+            printErr = true;
+        }
+        return input;
     }
 }

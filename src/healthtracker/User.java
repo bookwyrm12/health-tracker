@@ -47,6 +47,8 @@ public class User extends DBRecord {
     
     /**
      * Create a new User.
+     * @param name
+     * @param email
      */
     public User(String name, String email) {
         this.name = name;
@@ -56,11 +58,42 @@ public class User extends DBRecord {
         this.height_log = new Log("Height Log");
     }
     
+    /**
+     * Create a new User.
+     * @param name
+     * @param email
+     * @param gender
+     * @param weight
+     * @param weight_goal
+     * @param height
+     * @param calories_goal
+     * @param activity_level
+     */
+    public User(String name, String email, String gender, float weight, float weight_goal, float height, float calories_goal, String activity_level) {
+        this.name = name;
+        this.email = email;
+        this.gender = gender;
+        this.weight = weight;
+        this.weight_goal = weight_goal;
+        this.height = height;
+        this.calories_goal = calories_goal;
+        this.activity_level = activity_level;
+        
+        this.diary = new Diary();
+        this.weight_log = new Log("Weight Log");
+        this.height_log = new Log("Height Log");
+        
+    }
+    
     
     //---------------------------------------
     // Class (static) methods
     //---------------------------------------
     
+    /**
+     * Get list of all users from DB. Does not include any logs, etc.
+     * @return ArrayList of User objects
+     */
     public static ArrayList<User> getAll() {
         ArrayList<User> users = new ArrayList<>();
         ResultSet rs = getAllFromDB("person");
@@ -79,11 +112,18 @@ public class User extends DBRecord {
             }
         } catch (SQLException ex) {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            doClose(rs);
         }
         
         return users;
     }
     
+    /**
+     * Get User object from DB given the id.
+     * @param id of User to retrieve
+     * @return User
+     */
     public static User find(int id) {
         // Person
         ResultSet rs = dbQuery("SELECT * FROM person WHERE person_id = " + String.valueOf(id));
@@ -101,6 +141,8 @@ public class User extends DBRecord {
             }
         } catch (SQLException ex) {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            doClose(rs);
         }
         
         // TODO: Current Height
@@ -204,6 +246,14 @@ public class User extends DBRecord {
     }
     
     /**
+     * Set birth date.
+     * @param birth_date String in format "yyyy-mm-dd"
+     */
+    public void setBirthDate(String birth_date) {
+        this.birth_date = LocalDate.parse(birth_date);
+    }
+    
+    /**
      * Get current weight.
      * @return float user weight
      */
@@ -288,13 +338,16 @@ public class User extends DBRecord {
     /**
      * Save/update user record in DB.
      */
-    public void saveUser() {
-        String[] colNames = {"name", "email", "gender", "birth_date", "current_weight_id", 
-            "current_height_id", "goal_weight", "goal_calories", "activity_level"};
-        String[] values = {this.name, this.email, this.gender, convertToMysqlDate(this.birth_date),
-            String.valueOf(this.weight_log.getCurrent()), String.valueOf(this.height_log.getCurrent()),
-            String.valueOf(this.weight_goal), String.valueOf(this.calories_goal), String.valueOf(this.activity_level)};
-        updateRecord("person", "person_id", String.valueOf(this.id), colNames, values);
+    public void saveUser(boolean newUser) {
+        String[] colNames = {"name", "email", "gender", "birth_date", 
+            "goal_weight", "goal_calories", "activity_level"};
+        String[] values = {this.name, this.email, this.gender, 
+            convertToMysqlDate(this.birth_date), String.valueOf(this.weight_goal), 
+            String.valueOf(this.calories_goal), String.valueOf(this.activity_level)};
+        if (newUser)
+            this.id = createRecord("person", colNames, values);
+        else
+            updateRecord("person", "person_id", String.valueOf(this.id), colNames, values);
     }
     
     /**

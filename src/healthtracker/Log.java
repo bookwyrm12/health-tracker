@@ -12,7 +12,7 @@ public class Log {
     
     private String name;                         /** The log name. */
     private ArrayList<LogEntry> entries;         /** The log entries. */
-    private int current;                         /** The id of the current log entry. */
+    private Integer current;                     /** The id of the current log entry. */
     
     
     //---------------------------------------
@@ -37,7 +37,7 @@ public class Log {
      * Get current/latest log entry id.
      * @return int current log entry id
      */
-    public int getCurrent() {
+    public Integer getCurrent() {
         return this.current;
     }
     
@@ -45,7 +45,7 @@ public class Log {
      * Set current log entry id.
      * @param id
      */
-    public void setCurrent(int id) {
+    public void setCurrent(Integer id) {
         this.current = id;
     }
     

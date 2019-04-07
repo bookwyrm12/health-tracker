@@ -65,10 +65,12 @@ public class DBConnection {
      */
     public void initConnection() {
         String query = "SELECT VERSION()";
+        Connection conn = null;
+        ResultSet rs = null;
         try {
-            Connection conn = this.ds.getConnection();
+            conn = this.ds.getConnection();
             PreparedStatement pst = conn.prepareStatement(query);
-            ResultSet rs = pst.executeQuery(query);
+            rs = pst.executeQuery(query);
             
             if (rs.next()) {
                 String version = rs.getString(1);
@@ -79,6 +81,8 @@ public class DBConnection {
             System.out.println("Failed to create the database connection.");
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
+        } finally {
+            doClose(rs, conn);
         }
     }
     
@@ -122,14 +126,17 @@ public class DBConnection {
      * @param query 
      */
     public void execute(String query) {
+        Connection conn = null;
         try {
-            Connection conn = this.ds.getConnection();
+            conn = this.ds.getConnection();
             PreparedStatement pst = conn.prepareStatement(query);
             boolean isResult = pst.execute();
             
         } catch (SQLException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
+        } finally {
+            doClose(null, conn);
         }
     }
     
@@ -139,10 +146,12 @@ public class DBConnection {
      * @return ResultSet with query result(s)
      */
     public ResultSet executeQuery(String query) {
+        Connection conn = null;
+        ResultSet rs = null;
         try {
-            Connection conn = this.ds.getConnection();
+            conn = this.ds.getConnection();
             PreparedStatement pst = conn.prepareStatement(query);
-            ResultSet rs = pst.executeQuery(query);
+            rs = pst.executeQuery(query);
             return rs;
             
         } catch (SQLException ex) {
@@ -159,17 +168,50 @@ public class DBConnection {
      * @return int indicating # of rows updated
      */
     public int executeUpdate(String query) {
+        Connection conn = null;
+        int primaryKey = 0;
         try {
-            Connection conn = this.ds.getConnection();
-            PreparedStatement pst = conn.prepareStatement(query);
-            int rs = pst.executeUpdate(query);
-            return rs;
+            conn = this.ds.getConnection();
+            PreparedStatement pst = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            int affectedRows = pst.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+            
+            if (affectedRows == 0) {
+                throw new SQLException("Creating record failed; no rows affected.");
+            }
+            try (ResultSet genKeys = pst.getGeneratedKeys()) {
+                if (genKeys.next()) {
+                    primaryKey = genKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating record failed; no ID obtained.");
+                }
+            }
             
         } catch (SQLException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
+        } finally {
+            doClose(null, conn);
         }
         
-        return 0;
+        return primaryKey;
+    }
+    
+    /**
+     * Close open Connection or ResultSet.
+     * @param rs
+     * @param conn
+     * @throws SQLException 
+     */
+    public void doClose(ResultSet rs, Connection conn) {
+        if (rs != null) try {
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (conn != null) try {
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

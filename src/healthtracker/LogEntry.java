@@ -12,6 +12,7 @@ public class LogEntry {
     
     private int id;                              /**  */
     private Date updated;                        /**  */
+    private boolean isCurrent;                   /**  */
     
     
     //---------------------------------------
