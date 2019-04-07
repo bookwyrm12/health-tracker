@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `activity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activity` (
-  `activity_id` bigint(20) NOT NULL,
+  `activity_id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` longtext,
   PRIMARY KEY (`activity_id`)
@@ -49,9 +49,9 @@ DROP TABLE IF EXISTS `activity_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activity_log` (
-  `activity_log_id` bigint(20) NOT NULL,
-  `activity_id` bigint(20) NOT NULL,
-  `person_id` bigint(20) NOT NULL,
+  `activity_log_id` int NOT NULL AUTO_INCREMENT,
+  `activity_id` int NOT NULL,
+  `person_id` int NOT NULL,
   `duration` float,
   `calories_burned` float,
   `updated_at` datetime NOT NULL,
@@ -80,7 +80,7 @@ DROP TABLE IF EXISTS `bmi_table`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bmi_table` (
-  `bmi_range_id` bigint(20) NOT NULL,
+  `bmi_range_id` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`bmi_range_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -102,7 +102,7 @@ DROP TABLE IF EXISTS `food`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `food` (
-  `food_id` bigint(20) NOT NULL,
+  `food_id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `type` varchar(255),
   `calories` float,
@@ -130,9 +130,9 @@ DROP TABLE IF EXISTS `food_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `food_log` (
-  `food_log_id` bigint(20) NOT NULL,
-  `food_id` bigint(20) NOT NULL,
-  `person_id` bigint(20) NOT NULL,
+  `food_log_id` int NOT NULL AUTO_INCREMENT,
+  `food_id` int NOT NULL,
+  `person_id` int NOT NULL,
   `quantity` float NOT NULL DEFAULT '1',
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`food_log_id`),
@@ -160,8 +160,8 @@ DROP TABLE IF EXISTS `height_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `height_log` (
-  `height_log_id` bigint(20) NOT NULL,
-  `person_id` bigint(20) NOT NULL,
+  `height_log_id` int NOT NULL AUTO_INCREMENT,
+  `person_id` int NOT NULL,
   `unit` mediumtext NOT NULL,
   `amount` float NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -188,23 +188,17 @@ DROP TABLE IF EXISTS `person`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `person` (
-  `person_id` bigint(20) NOT NULL DEFAULT '10101',
+  `person_id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `email` varchar(255),
   `gender` varchar(255),
   `birth_date` date,
-  `current_weight_id` bigint(20),
-  `current_height_id` bigint(20),
   `goal_weight` float,
   `goal_calories` float,
   `activity_level` varchar(255),
   PRIMARY KEY (`person_id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
-  KEY `person_name_idx` (`name`),
-  KEY `current_weight_id_person_idx` (`current_weight_id`),
-  KEY `current_height_id_person_idx` (`current_height_id`),
-  CONSTRAINT `current_height_id_person` FOREIGN KEY (`current_height_id`) REFERENCES `height_log` (`height_log_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `current_weight_id_person` FOREIGN KEY (`current_weight_id`) REFERENCES `weight_log` (`weight_log_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `person_name_idx` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -225,8 +219,8 @@ DROP TABLE IF EXISTS `weight_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `weight_log` (
-  `weight_log_id` bigint(20) NOT NULL,
-  `person_id` bigint(20) NOT NULL,
+  `weight_log_id` int NOT NULL AUTO_INCREMENT,
+  `person_id` int NOT NULL,
   `unit` mediumtext NOT NULL,
   `amount` float NOT NULL,
   `updated_at` datetime NOT NULL,
