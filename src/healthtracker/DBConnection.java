@@ -21,11 +21,6 @@ public class DBConnection {
     //---------------------------------------
     
     private MysqlDataSource ds;                                                 /**  */
-    private Connection conn;                                                    /**  */
-    private String driver;                                                      /**  */
-    private String url;                                                         /**  */
-    private String user;                                                        /**  */
-    private String password;                                                    /**  */
     
     
     //---------------------------------------
@@ -37,7 +32,7 @@ public class DBConnection {
      */
     public DBConnection() {
         getConnectionConfig("health-tracker/config.properties");
-        initConnection();
+        //initConnection();
     }
     
     
@@ -47,6 +42,7 @@ public class DBConnection {
     
     /**
      * Get & load database connection properties from config file.
+     * @param fileName config file path
      */
     private void getConnectionConfig(String fileName) {
         Properties props = new Properties();
@@ -64,6 +60,9 @@ public class DBConnection {
         this.ds = ds;
     }
     
+    /**
+     * Initialize DB connection.
+     */
     public void initConnection() {
         String query = "SELECT VERSION()";
         try {
@@ -81,18 +80,28 @@ public class DBConnection {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
         }
-        
-        this.conn = conn;
     }
     
+    /**
+     * Initialize DB.
+     * @param fileName schema file path
+     */
     public void initDB(String fileName) {
         executeSqlFile(fileName);
     }
     
+    /**
+     * Seed DB.
+     * @param fileName seed file path
+     */
     public void seedDB(String fileName) {
         executeSqlFile(fileName);
     }
     
+    /**
+     * Execute sql script from file.
+     * @param fileName sql file path
+     */
     public void executeSqlFile(String fileName) {
         // Reading a file to a string logic from:
         // https://howtodoinjava.com/java/io/java-read-file-to-string-examples/
@@ -105,7 +114,14 @@ public class DBConnection {
             System.out.println(ex);
         }
         String query = contentBuilder.toString();
-        
+        execute(query);
+    }
+    
+    /**
+     * Execute a Mysql query.
+     * @param query 
+     */
+    public void execute(String query) {
         try {
             Connection conn = this.ds.getConnection();
             PreparedStatement pst = conn.prepareStatement(query);
@@ -117,7 +133,43 @@ public class DBConnection {
         }
     }
     
-    public void seedObjectsFromDB() {
-        // TODO
+    /**
+     * Execute a Mysql query statement.
+     * @param query
+     * @return ResultSet with query result(s)
+     */
+    public ResultSet executeQuery(String query) {
+        try {
+            Connection conn = this.ds.getConnection();
+            PreparedStatement pst = conn.prepareStatement(query);
+            ResultSet rs = pst.executeQuery(query);
+            return rs;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Execute a Mysql update or insert statement.
+     * @param query
+     * @return int indicating # of rows updated
+     */
+    public int executeUpdate(String query) {
+        try {
+            Connection conn = this.ds.getConnection();
+            PreparedStatement pst = conn.prepareStatement(query);
+            int rs = pst.executeUpdate(query);
+            return rs;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+        }
+        
+        return 0;
     }
 }

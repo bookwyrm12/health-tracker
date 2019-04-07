@@ -46,6 +46,20 @@ public class Food {
     //---------------------------------------
     
     /**
+     * Get id.
+     */
+    public int getId() {
+        return this.id;
+    }
+    
+    /**
+     * Set id.
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    /**
      * Get name.
      */
     public String getName() {
