@@ -30,30 +30,22 @@ public class DiaryEntry extends DBRecord {
         this.food = food;
         this.quantity = quantity;
         this.updated = new Date();
-        this.saved = false;
+        saveEntry(true);
+        this.saved = true;
     }
     
     /**
      * Create a Diary Entry with specified date/time.
      * @param food
+     * @param quantity
      * @param updated
-     * @param quantity
      */
-    public DiaryEntry(Food food, Date updated, float quantity) {
-        // TODO: later
-    }
-    
-    /**
-     * Create a Diary Entry & immediately save to disk.
-     * @param food
-     * @param quantity
-     * @param save
-     */
-    public DiaryEntry(Food food, float quantity, boolean save) {
+    public DiaryEntry(Food food, float quantity, Date updated) {
         this.food = food;
         this.quantity = quantity;
-        this.updated = new Date();
-        this.saved = this.createEntry();
+        this.updated = updated;
+        saveEntry(true);
+        this.saved = true;
     }
     
     
@@ -78,6 +70,22 @@ public class DiaryEntry extends DBRecord {
     }
     
     /**
+     * Get quantity.
+     * @return float quantity
+     */
+    public float getQuantity() {
+        return this.quantity;
+    }
+    
+    /**
+     * Set quantity.
+     * @param quantity
+     */
+    public void setQuantity(float quantity) {
+        this.quantity = quantity;
+    }
+    
+    /**
      * Update a Diary Entry in the DB.
      */
     public void updateEntry() {
@@ -85,16 +93,16 @@ public class DiaryEntry extends DBRecord {
     }
     
     /**
-     * Create a Diary Entry in the DB.
+     * Create/update a Diary Entry record in DB.
+     * @param newRecord indicates creating a new record (false if updating existing record)
      */
-    private boolean createEntry() {
-        String tableName = "food_log";
-        String colNames = "food_id, person_id, quantity, updated_at";
-        String updatedStr = convertToMysqlDate(this.updated);
-        String values = String.valueOf(this.food.getId()) + " , " + "1" +
-            " , " + String.valueOf(this.quantity) + " , " + updatedStr;
-        createRecord(tableName, colNames, values);
-        return true;
+    public void saveEntry(boolean newRecord) {
+        String[] colNames = {"food_id", "person_id", "quantity", "updated_at"};
+        String[] values = {String.valueOf(this.food.getId()), "1",
+            String.valueOf(this.quantity), convertToMysqlDate(this.updated)};
+        if (newRecord)
+            this.id = createRecord("food_log", colNames, values);
+        else
+            updateRecord("food_log", "food_log_id", String.valueOf(this.id), colNames, values);
     }
-    
 }

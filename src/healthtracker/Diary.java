@@ -22,7 +22,7 @@ public class Diary {
      * Create an empty Diary.
      */
     public Diary() {
-        this.entries = new ArrayList<DiaryEntry>();
+        this.entries = new ArrayList<>();
     }
     
     
@@ -32,6 +32,8 @@ public class Diary {
     
     /**
      * Add an entry to the Diary.
+     * @param food
+     * @param quantity
      */
     public void addEntry(Food food, float quantity) {
         DiaryEntry entry = new DiaryEntry(food, quantity);
@@ -40,8 +42,9 @@ public class Diary {
     
     /**
      * Retrieve Diary entry.
+     * @return DiaryEntry
      */
-    public DiaryEntry getEntry() {
+    public DiaryEntry getEntry(int id) {
         // TODO
         DiaryEntry entry = new DiaryEntry(new Food(""), 0);
         return entry;
@@ -49,6 +52,7 @@ public class Diary {
     
     /**
      * Update Diary entry.
+     * @param entry
      */
     public void editEntry(DiaryEntry entry) {
         // TODO
@@ -66,10 +70,11 @@ public class Diary {
     }
     
     /**
-     * Save Diary.
-     * Future optimization: only updates Diary Entries that haven't been saved already
+     * Save all Diary Entries.
+     * TODO future: Optimization: only updates Diary Entries that haven't been saved already
+     * @return boolean
      */
-    public boolean saveEntry() {
+    public boolean saveAllEntries() {
         boolean success = false;
         // TODO
         return success;
