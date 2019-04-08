@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * A diary contains log entries about food consumed.
@@ -44,9 +45,9 @@ public class Diary {
      * Retrieve Diary entry.
      * @return DiaryEntry
      */
-    public DiaryEntry getEntry(int id) {
-        // TODO
-        DiaryEntry entry = new DiaryEntry(new Food(""), 0);
+    public DiaryEntry findEntry(int id) {
+        Optional<DiaryEntry> matchingObj = entries.stream().filter(e -> e.getId() == id).findFirst();
+        DiaryEntry entry = matchingObj.orElse(null);
         return entry;
     }
     
