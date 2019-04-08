@@ -1,8 +1,11 @@
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Abstract class between java objects and SQL records.
@@ -60,6 +63,89 @@ public abstract class DBRecord {
         String query = "SELECT * FROM " + tableName;
         ResultSet rs = dbQuery(query);
         return rs;
+    }
+    
+    /**
+     * Retrieve a single value from a single row in the DB.
+     * @param tableName
+     * @param PKCol
+     * @param PKValue
+     * @param searchCol
+     * @param orderBy
+     * @param orderDir
+     * @param limit
+     * @return ResultSet with value
+     */
+    public static ResultSet getSingleVal(String tableName, String PKCol, String PKValue, String orderBy, String orderDir, String limit) {
+        String query = "SELECT * FROM " + tableName + " WHERE " + PKCol + " = " + PKValue;
+        if (orderBy != null && !orderBy.equals(""))
+            query += " ORDER BY " + orderBy;
+        
+        if (orderDir == null || orderDir.equals(""))
+            orderDir = "ASC";
+        query += " " + orderDir;
+        
+        if (limit != null && !limit.equals(""))
+            query += " LIMIT " + limit;
+        
+        ResultSet rs = dbQuery(query);
+        return rs;
+    }
+    
+    /**
+     * Retrieve a single String value from a single row in the DB.
+     * @param tableName
+     * @param PKCol
+     * @param PKValue
+     * @param searchCol
+     * @param orderBy
+     * @param orderDir
+     * @param limit
+     * @return String
+     */
+    public static String getSingleValString(String tableName, String PKCol, String PKValue, String searchCol, String orderBy, String orderDir, String limit) {
+        ResultSet rs = getSingleVal(tableName, PKCol, PKValue, orderBy, orderDir, limit);
+        String value = "";
+        
+        try {
+            if (rs.next()) {
+                value = rs.getString(searchCol);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            doClose(rs);
+        }
+        
+        return value;
+    }
+    
+    /**
+     * Retrieve a single Float value from a single row in the DB.
+     * @param tableName
+     * @param PKCol
+     * @param PKValue
+     * @param searchCol
+     * @param orderBy
+     * @param orderDir
+     * @param limit
+     * @return Float
+     */
+    public static Float getSingleValFloat(String tableName, String PKCol, String PKValue, String searchCol, String orderBy, String orderDir, String limit) {
+        ResultSet rs = getSingleVal(tableName, PKCol, PKValue, orderBy, orderDir, limit);
+        Float value = null;
+        
+        try {
+            if (rs.next()) {
+                value = rs.getFloat(searchCol);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            doClose(rs);
+        }
+        
+        return value;
     }
     
     /**

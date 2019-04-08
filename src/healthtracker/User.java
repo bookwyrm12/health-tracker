@@ -145,8 +145,14 @@ public class User extends DBRecord {
             doClose(rs);
         }
         
-        // TODO: Current Height
-        // TODO: Current Weight
+        // Current Height
+        float h = getSingleValFloat("height_log", "person_id", String.valueOf(id), "amount", "updated_at", "DESC", "1");
+        u.setHeight(h);
+        
+        // Current Weight
+        float w = getSingleValFloat("weight_log", "person_id", String.valueOf(id), "amount", "updated_at", "DESC", "1");
+        u.setWeight(w);
+        
         // TODO: Height Logs
         // TODO: Weight Logs
         // TODO: Food & Food Logs
@@ -337,6 +343,7 @@ public class User extends DBRecord {
     
     /**
      * Save/update user record in DB.
+     * @param newUser indicates creating a new user (false if updating existing user)
      */
     public void saveUser(boolean newUser) {
         String[] colNames = {"name", "email", "gender", "birth_date", 
