@@ -13,6 +13,13 @@ import java.util.logging.Logger;
 public class User extends DBRecord {
     
     //---------------------------------------
+    // Class (static) variables
+    //---------------------------------------
+    
+    private static ArrayList<Food> foods;        /**  */
+    
+    
+    //---------------------------------------
     // Class instance variables
     //---------------------------------------
     
@@ -126,7 +133,7 @@ public class User extends DBRecord {
      */
     public static User find(int id) {
         // Person
-        ResultSet rs = dbQuery("SELECT * FROM person WHERE person_id = " + String.valueOf(id));
+        ResultSet rs = getResultSet("person", "person_id", String.valueOf(id), null, null, null);
         User u = new User();
         
         try {
@@ -146,16 +153,55 @@ public class User extends DBRecord {
         }
         
         // Current Height
-        float h = getSingleValFloat("height_log", "person_id", String.valueOf(id), "amount", "updated_at", "DESC", "1");
-        u.setHeight(h);
+        Float h = getSingleValFloat("height_log", "person_id", String.valueOf(id), "amount", "updated_at", "DESC", "1");
+        if (h != null)
+            u.setHeight(h);
         
         // Current Weight
-        float w = getSingleValFloat("weight_log", "person_id", String.valueOf(id), "amount", "updated_at", "DESC", "1");
-        u.setWeight(w);
+        Float w = getSingleValFloat("weight_log", "person_id", String.valueOf(id), "amount", "updated_at", "DESC", "1");
+        if (w != null)
+            u.setWeight(w);
         
         // TODO: Height Logs
         // TODO: Weight Logs
-        // TODO: Food & Food Logs
+        
+        // Foods
+        ResultSet rsFood = getAllFromDB("food");
+        Food f;
+        
+        try {
+            while (rsFood.next()) {
+                f = new Food(rsFood.getString("name"));
+                f.setId(rsFood.getInt("food_id"));
+                f.setType(rsFood.getString("type"));
+                f.setCalories(rsFood.getFloat("calories"));
+                f.setCarbs(rsFood.getFloat("carbs"));
+                f.setProteins(rsFood.getFloat("proteins"));
+                f.setFats(rsFood.getFloat("fats"));
+                User.foods.add(f);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            doClose(rsFood);
+        }
+        
+        // Food Logs
+        ResultSet rsFoodLog = getResultSet("food_log", "person_id", String.valueOf(id), null, null, null);
+        DiaryEntry entry;
+        
+        try {
+            while (rsFoodLog.next()) {
+                f = Food.find(rsFoodLog.getInt("food_id"));
+                entry = new DiaryEntry(String.valueOf(u.getId()), f, rsFoodLog.getFloat("quantity"), rsFoodLog.getDate("updated_at"), false);
+                u.diary.addEntry(entry);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            doClose(rsFoodLog);
+        }
+        
         // TODO later: Activities & Activity Logs
         
         return u;
@@ -363,6 +409,6 @@ public class User extends DBRecord {
      * @param quantity
      */
     public void addDiaryEntry(Food food, float quantity) {
-        this.diary.addEntry(food, quantity);
+        this.diary.addEntry(String.valueOf(this.id), food, quantity);
     }
 }

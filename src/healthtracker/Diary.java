@@ -28,16 +28,25 @@ public class Diary {
     
     
     //---------------------------------------
-    // Class methods
+    // Class instance methods
     //---------------------------------------
     
     /**
      * Add an entry to the Diary.
+     * @param entry
+     */
+    public void addEntry(DiaryEntry entry) {
+        this.entries.add(entry);
+    }
+    
+    /**
+     * Add an entry to the Diary.
+     * @param userId
      * @param food
      * @param quantity
      */
-    public void addEntry(Food food, float quantity) {
-        DiaryEntry entry = new DiaryEntry(food, quantity);
+    public void addEntry(String userId, Food food, float quantity) {
+        DiaryEntry entry = new DiaryEntry(userId, food, quantity);
         this.entries.add(entry);
     }
     

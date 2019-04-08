@@ -76,14 +76,13 @@ public abstract class DBRecord {
      * @param limit
      * @return ResultSet with value
      */
-    public static ResultSet getSingleVal(String tableName, String PKCol, String PKValue, String orderBy, String orderDir, String limit) {
+    public static ResultSet getResultSet(String tableName, String PKCol, String PKValue, String orderBy, String orderDir, String limit) {
         String query = "SELECT * FROM " + tableName + " WHERE " + PKCol + " = " + PKValue;
         if (orderBy != null && !orderBy.equals(""))
             query += " ORDER BY " + orderBy;
         
-        if (orderDir == null || orderDir.equals(""))
-            orderDir = "ASC";
-        query += " " + orderDir;
+        if (orderDir != null && !orderDir.equals(""))
+            query += " " + orderDir;
         
         if (limit != null && !limit.equals(""))
             query += " LIMIT " + limit;
@@ -104,7 +103,7 @@ public abstract class DBRecord {
      * @return String
      */
     public static String getSingleValString(String tableName, String PKCol, String PKValue, String searchCol, String orderBy, String orderDir, String limit) {
-        ResultSet rs = getSingleVal(tableName, PKCol, PKValue, orderBy, orderDir, limit);
+        ResultSet rs = getResultSet(tableName, PKCol, PKValue, orderBy, orderDir, limit);
         String value = "";
         
         try {
@@ -132,7 +131,7 @@ public abstract class DBRecord {
      * @return Float
      */
     public static Float getSingleValFloat(String tableName, String PKCol, String PKValue, String searchCol, String orderBy, String orderDir, String limit) {
-        ResultSet rs = getSingleVal(tableName, PKCol, PKValue, orderBy, orderDir, limit);
+        ResultSet rs = getResultSet(tableName, PKCol, PKValue, orderBy, orderDir, limit);
         Float value = null;
         
         try {
@@ -205,7 +204,7 @@ public abstract class DBRecord {
                 }
             }
             
-            if (values[i].equals("null"))
+            if (values[i] == null)
                 vals += values[i];
             else
                 vals += "'" + values[i] + "'";
@@ -239,7 +238,7 @@ public abstract class DBRecord {
     public void updateRecord(String tableName, String PKCol, String PKValue, String[] colNames, String[] values) {
         String query = "UPDATE " + tableName + " SET ";
         for (int i = 0; i < colNames.length; i++) {
-            if (values[i].equals("null"))
+            if (values[i] == null)
                 query += colNames[i] + " = " + values[i];
             else
                 query += colNames[i] + " = '" + values[i] +"'";

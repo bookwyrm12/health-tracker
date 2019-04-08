@@ -1,3 +1,8 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author April Nickel
@@ -21,6 +26,13 @@ public class Food extends DBRecord {
     //---------------------------------------
     // Constructors
     //---------------------------------------
+    
+    /**
+     * Create a new Food.
+     */
+    public Food() {
+        // empty food object
+    }
     
     /**
      * Create a new Food.
@@ -50,7 +62,39 @@ public class Food extends DBRecord {
     
     
     //---------------------------------------
-    // Class methods
+    // Class (static) methods
+    //---------------------------------------
+    
+    /**
+     * Get Food object from DB given the id.
+     * @param id of Food to retrieve
+     * @return Food
+     */
+    public static Food find(int id) {
+        ResultSet rs = getResultSet("food", "food_id", String.valueOf(id), null, null, null);
+        Food f = new Food();
+        
+        try {
+            if (rs.next()) {
+                f = new Food(rs.getString("name"));
+                f.setId(rs.getInt("food_id"));
+                f.setType(rs.getString("type"));
+                f.setCalories(rs.getFloat("calories"));
+                f.setCarbs(rs.getFloat("carbs"));
+                f.setProteins(rs.getFloat("proteins"));
+                f.setFats(rs.getFloat("fats"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            doClose(rs);
+        }
+        
+        return f;
+    }
+    
+    //---------------------------------------
+    // Class instance methods
     //---------------------------------------
     
     /**
