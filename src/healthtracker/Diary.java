@@ -43,6 +43,7 @@ public class Diary {
     
     /**
      * Retrieve Diary entry.
+     * @param id
      * @return DiaryEntry
      */
     public DiaryEntry findEntry(int id) {
