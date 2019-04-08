@@ -166,25 +166,25 @@ public class User extends DBRecord {
         // TODO: Weight Logs
         
         // Foods
-        ResultSet rsFood = getAllFromDB("food");
+//        ResultSet rsFood = getAllFromDB("food");
         Food f;
-        
-        try {
-            while (rsFood.next()) {
-                f = new Food(rsFood.getString("name"));
-                f.setId(rsFood.getInt("food_id"));
-                f.setType(rsFood.getString("type"));
-                f.setCalories(rsFood.getFloat("calories"));
-                f.setCarbs(rsFood.getFloat("carbs"));
-                f.setProteins(rsFood.getFloat("proteins"));
-                f.setFats(rsFood.getFloat("fats"));
-                User.foods.add(f);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            doClose(rsFood);
-        }
+//        
+//        try {
+//            while (rsFood.next()) {
+//                f = new Food(rsFood.getString("name"), false);
+//                f.setId(rsFood.getInt("food_id"));
+//                f.setType(rsFood.getString("type"));
+//                f.setCalories(rsFood.getFloat("calories"));
+//                f.setCarbs(rsFood.getFloat("carbs"));
+//                f.setProteins(rsFood.getFloat("proteins"));
+//                f.setFats(rsFood.getFloat("fats"));
+//                User.foods.add(f);
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+//        } finally {
+//            doClose(rsFood);
+//        }
         
         // Food Logs
         ResultSet rsFoodLog = getResultSet("food_log", "person_id", String.valueOf(id), null, null, null);
@@ -410,5 +410,9 @@ public class User extends DBRecord {
      */
     public void addDiaryEntry(Food food, float quantity) {
         this.diary.addEntry(String.valueOf(this.id), food, quantity);
+    }
+    
+    public String getDiaryReport(String filter, String displayNum) {
+        return this.diary.getReport(String.valueOf(this.id), filter, displayNum);
     }
 }

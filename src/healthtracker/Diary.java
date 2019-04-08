@@ -5,7 +5,7 @@ import java.util.Optional;
  * A diary contains log entries about food consumed.
  * @author April Nickel
  */
-public class Diary {
+public class Diary extends Report {
     
     //---------------------------------------
     // Class instance variables
@@ -89,5 +89,22 @@ public class Diary {
         boolean success = false;
         // TODO
         return success;
+    }
+    
+    public String getReport(String userId, String filter, String displayNum) {
+        String groupBy;
+        switch(filter) {
+            case "d":
+                groupBy = "date";       break;
+            case "m":
+                groupBy = "monthname";  break;
+            case "y":
+                groupBy = "year";       break;
+            default:
+                groupBy = "date";       break;
+        }
+        String[] sumCols = {"calories", "carbs", "proteins", "fats"};
+        String report = getReport("food", "food_log", "food_id", "person_id", userId, groupBy, "updated_at", sumCols, displayNum);
+        return report;
     }
 }

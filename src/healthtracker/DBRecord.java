@@ -70,7 +70,6 @@ public abstract class DBRecord {
      * @param tableName
      * @param PKCol
      * @param PKValue
-     * @param searchCol
      * @param orderBy
      * @param orderDir
      * @param limit
@@ -86,6 +85,45 @@ public abstract class DBRecord {
         
         if (limit != null && !limit.equals(""))
             query += " LIMIT " + limit;
+        
+        ResultSet rs = dbQuery(query);
+        return rs;
+    }
+    
+    /**
+     * Retrieve a single value from a single row in the DB.
+     *  EXAMPLE QUERY:
+     *      SELECT
+     *          month(updated_at) month,
+     *          FORMAT(SUM(calories), 2) total_calories,
+     *          FORMAT(SUM(carbs), 2) total_carbs,
+     *          FORMAT(SUM(proteins), 2) total_proteins,
+     *          FORMAT(SUM(fats), 2) total_fats
+     *      FROM (
+     *          food
+     *          INNER JOIN
+     *          food_log USING (food_id)
+     *      )
+     *      WHERE person_id = 3
+     *      GROUP BY month(updated_at);
+     * @return ResultSet with value
+     */
+    public static ResultSet getResultSet(String table1, String table2, String joinCol, String PKCol, String PKValue, String groupBy, String groupByCol, String[] sumCols, String limit) {
+        String query = "SELECT " + groupBy + "(" + groupByCol + ") " + groupBy + " ,";
+        for (int i = 0; i < sumCols.length; i++) {
+            query += " FORMAT(SUM(" + sumCols[i] + "), 2) " + sumCols[i];
+            
+            if (i < sumCols.length - 1)
+                query += " , ";
+        }
+        query += " FROM ( " + table1 + " INNER JOIN " + table2 + " USING (" + joinCol + ") )";
+        query += " WHERE " + PKCol + " = " + PKValue;
+        query += " GROUP BY " + groupBy + "(" + groupByCol + ")";
+        
+        if (limit != null && !limit.equals(""))
+            query += " LIMIT " + limit;
+        
+        query += " ;";
         
         ResultSet rs = dbQuery(query);
         return rs;

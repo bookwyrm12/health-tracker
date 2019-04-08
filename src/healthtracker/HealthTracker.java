@@ -341,9 +341,53 @@ public class HealthTracker {
         // 4. Diary (Food) Report
         //---------------------------------------
         
-        // TODO
+        boolean run = true;
+        boolean makeSelection = true;
+        String selection, filter = "d", displayNum = "10";
         
-        return ScreenOption.MAIN_MENU;
+        while(run) {
+            printFormat("%n--- DIARY: ENTRIES ---%n%n");
+            
+            printFormat(user.getDiaryReport(filter, displayNum));
+            
+            String menu = "%nPlease make a selection:%n" +
+                          "%nChange Filter:  (D) By Day | (M) By Month | (Y) By Year%n" +
+                          "Display:  (10) | (25) | (50) | (100)%n" +
+                          "%n(N) Add New Diary Entry%n" +
+                          "(B) Back to Main Menu%n" +
+                          "(Q) Exit Application%n";
+            printFormat(menu);
+            
+            makeSelection = true;
+            while(makeSelection) {
+                selection = getInputString(null).toLowerCase();
+                switch(selection) {
+                    case "d":
+                    case "m":
+                    case "y":
+                        filter = selection;
+                        makeSelection = false;
+                        break;
+                    case "10":
+                    case "25":
+                    case "50":
+                    case "100":
+                        displayNum = selection;
+                        makeSelection = false;
+                        break;
+                    case "n":
+                        return ScreenOption.DIARY_NEW_ENTRY;
+                    case "b":
+                        return ScreenOption.MAIN_MENU;
+                    case "q":
+                        return ScreenOption.EXIT_CONFIRM;
+                    default:
+                        printFormat("Please enter a valid option.%n");
+                }
+            }
+        }
+        
+        return ScreenOption.DIARY_MENU;
     }
     
     /**
@@ -390,7 +434,7 @@ public class HealthTracker {
                 selection = getInputString(null).toLowerCase();
                 switch(selection) {
                     case "y":
-                        Food newFood = new Food(food, calories, carbs, proteins, fats);
+                        Food newFood = new Food(food, calories, carbs, proteins, fats, true);
                         user.addDiaryEntry(newFood, quantity);
                         printFormat("%nEntry saved.%n");
                         makeSelection = false;

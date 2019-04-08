@@ -38,9 +38,10 @@ public class Food extends DBRecord {
      * Create a new Food.
      * @param name
      */
-    public Food(String name) {
+    public Food(String name, boolean save) {
         this.name = name;
-        saveRecord(true);
+        if (save)
+            saveRecord(true);
     }
     
     /**
@@ -51,13 +52,14 @@ public class Food extends DBRecord {
      * @param proteins
      * @param fats
      */
-    public Food(String name, float calories, float carbs, float proteins, float fats) {
+    public Food(String name, float calories, float carbs, float proteins, float fats, boolean save) {
         this.name = name;
         this.calories = calories;
         this.carbs = carbs;
         this.proteins = proteins;
         this.fats = fats;
-        saveRecord(true);
+        if (save)
+            saveRecord(true);
     }
     
     
@@ -76,7 +78,7 @@ public class Food extends DBRecord {
         
         try {
             if (rs.next()) {
-                f = new Food(rs.getString("name"));
+                f = new Food(rs.getString("name"), false);
                 f.setId(rs.getInt("food_id"));
                 f.setType(rs.getString("type"));
                 f.setCalories(rs.getFloat("calories"));
@@ -127,7 +129,6 @@ public class Food extends DBRecord {
      */
     public void setName(String name) {
         this.name = name;
-        saveRecord(false);
     }
     
     /**
@@ -144,7 +145,6 @@ public class Food extends DBRecord {
      */
     public void setType(String type) {
         this.type = type;
-        saveRecord(false);
     }
     
     /**
@@ -161,7 +161,6 @@ public class Food extends DBRecord {
      */
     public void setCalories(float calories) {
         this.calories = calories;
-        saveRecord(false);
     }
     
     /**
@@ -178,7 +177,6 @@ public class Food extends DBRecord {
      */
     public void setCarbs(float carbs) {
         this.carbs = carbs;
-        saveRecord(false);
     }
     
     /**
@@ -195,7 +193,6 @@ public class Food extends DBRecord {
      */
     public void setProteins(float proteins) {
         this.proteins = proteins;
-        saveRecord(false);
     }
     
     /**
@@ -212,7 +209,6 @@ public class Food extends DBRecord {
      */
     public void setFats(float fats) {
         this.fats = fats;
-        saveRecord(false);
     }
     
     /**
