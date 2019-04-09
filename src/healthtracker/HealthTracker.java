@@ -208,7 +208,6 @@ public class HealthTracker {
         //---------------------------------------
         
         boolean run = true;
-        boolean makeSelection = true;
         String selection, name, email, gender, activity_level, birth_date;
         int year, month, date;
         float weight, weight_goal, height, calories_goal;
@@ -252,6 +251,7 @@ public class HealthTracker {
                   "(Q) No, Exit Application%n";
             printFormat(msg, name, email, gender, birth_date, height, weight, weight_goal, calories_goal);
             
+            boolean makeSelection = true;
             while(makeSelection) {
                 selection = getInputString(null).toLowerCase();
                 switch(selection) {
@@ -342,7 +342,6 @@ public class HealthTracker {
         //---------------------------------------
         
         boolean run = true;
-        boolean makeSelection = true;
         String selection, filter = "d", displayNum = "10";
         
         while(run) {
@@ -358,7 +357,7 @@ public class HealthTracker {
                           "(Q) Exit Application%n";
             printFormat(menu);
             
-            makeSelection = true;
+            boolean makeSelection = true;
             while(makeSelection) {
                 selection = getInputString(null).toLowerCase();
                 switch(selection) {
@@ -400,7 +399,6 @@ public class HealthTracker {
         //---------------------------------------
         
         boolean run = true;
-        boolean makeSelection = true;
         String selection, food;
         float calories, carbs, proteins, fats, quantity;
         
@@ -430,6 +428,7 @@ public class HealthTracker {
                   "(Q) No, Exit Application%n";
             printFormat(msg, food, quantity, calories, carbs, proteins, fats);
             
+            boolean makeSelection = true;
             while(makeSelection) {
                 selection = getInputString(null).toLowerCase();
                 switch(selection) {
