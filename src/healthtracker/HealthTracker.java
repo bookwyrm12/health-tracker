@@ -237,7 +237,7 @@ public class HealthTracker {
             
             msg = "%n---%n" +
                   "%nWould you like to save your information?%n" +
-                  "Name: %s%n" +
+                  "%nName: %s%n" +
                   "Email: %s%n" +
                   "Gender: %s%n" +
                   "Birth Date: %s%n" +
@@ -403,7 +403,7 @@ public class HealthTracker {
         float calories, carbs, proteins, fats, quantity;
         
         while(run) {
-            String msg = "%n--- DIARY: NEW ENTRY ---%n";
+            String msg = "%n--- DIARY: NEW ENTRY ---%n%n";
             printFormat(msg);
             
             food        = getInputString("Food:");
