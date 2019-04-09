@@ -92,6 +92,8 @@ public abstract class DBRecord {
     
     /**
      * Retrieve a single value from a single row in the DB.
+     *  Example call: getResultSet("food", "food_log", "food_id", "person_id", 3, "month",
+     *                             "updated_at", {"calories", "carbs", "proteins", "fats"}, "10");
      *  EXAMPLE QUERY:
      *      SELECT
      *          month(updated_at) month,
@@ -105,10 +107,12 @@ public abstract class DBRecord {
      *          food_log USING (food_id)
      *      )
      *      WHERE person_id = 3
-     *      GROUP BY month(updated_at);
+     *      GROUP BY month(updated_at)
+     *      LIMIT 10;
      * @return ResultSet with value
      */
-    public static ResultSet getResultSet(String table1, String table2, String joinCol, String PKCol, String PKValue, String groupBy, String groupByCol, String[] sumCols, String limit) {
+    public static ResultSet getResultSet(String table1, String table2, String joinCol, String PKCol,
+            String PKValue, String groupBy, String groupByCol, String[] sumCols, String limit) {
         String query = "SELECT " + groupBy + "(" + groupByCol + ") " + groupBy + " ,";
         for (int i = 0; i < sumCols.length; i++) {
             query += " FORMAT(SUM(" + sumCols[i] + "), 2) " + sumCols[i];
