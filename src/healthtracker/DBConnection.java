@@ -31,7 +31,7 @@ public class DBConnection {
      * Create a new DBConnection.
      */
     public DBConnection() {
-        getConnectionConfig("health-tracker/config.properties");
+        getConnectionConfig("config/config.properties");
         //initConnection();
     }
     
