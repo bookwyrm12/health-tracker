@@ -1,6 +1,28 @@
 # health-tracker
 
-Short project description.
+This health tracking app is being developed as a school project. The section below outlines the main features of this application.
+
+## About The App
+
+### Initial Setup
+
+Upon opening up the app for the first time, you will be prompted to enter your user information. This information is used by the system to give BMI, calorie, and nutritional recommendations.
+
+### Food Diary
+
+This feature is where your caloric intake is tracked. You can enter foods consumed and view reports of your daily, monthly, or yearly calorie & nutritional intake.
+
+### Recipe Builder - *Future feature.*
+
+This feature allows foods (with their nutritional information) to be combined, summing their nutritional information into a new food that can then be used in the Food Diary feature.
+
+### Activity Log - *Future feature.*
+
+This feature is where your daily activities can be recorded & tracked, and you can view reports of your daily, monthly, or yearly calories burned based on your activities.
+
+### BMI Calculator - *Future feature.*
+
+This feature calculates your BMI based on your height & weight, and displays where your BMI falls within the recommended BMI range.
 
 ## Development
 
@@ -58,29 +80,27 @@ Only do this if you've made changes to the tables/columns. This is not necessary
 
 #### Setting Up Your Database Configuration
 
-1. Create a `config.properties` file (copy the `config.properties.template` file).
+1. Create a `config/config.properties` file (copy the `config/config.properties.template` file).
 
 2. Update the values for your MySQL username & password (and host if different from the default).
 
 ### Running The App
 
-## About The App
+This application can be built and run within Netbeans.
 
-### Initial Setup
+* Under Run in the menu bar, select Run Project to run the project within Netbeans.
 
-### Caloric Intake
+* Alternatively, select Build Project to generate the `dist/` directory with the executable `.jar` file. Then, open a console in the directory containing the new `.jar` file, and run the following command:
 
-### BMI Calculator
-
-### Recipe Builder
-
-## Built With
+```
+java -jar health-tracker.jar
+```
 
 ## Authors
 
-* **April** - *---* - [bookwyrm12](https://github.com/bookwyrm12)
-* **Duncan** - *---* - [DuncanClelland](https://github.com/DuncanClelland)
-* **Maninder** - *---* - [maninderkaur97](https://github.com/maninderkaur97)
+* **April** - *Project Manager & Chief Programmer* - [bookwyrm12](https://github.com/bookwyrm12)
+* **Duncan** - *Idea Generator & Designer* - [DuncanClelland](https://github.com/DuncanClelland)
+* **Maninder** - *Use Case & Database Diagrammer* - [maninderkaur97](https://github.com/maninderkaur97)
 
 ## License
 
